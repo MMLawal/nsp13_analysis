@@ -1,0 +1,22 @@
+##Probability denisty of NSP13 domain
+
+#import libaries
+import seaborn as sns
+import numpy as np
+import matplotlib.pyplot as plt
+
+data = np.loadtxt("6jyt_rna_only.2A-1B.dat")
+data1 = np.loadtxt("../atp/all6jyt_atp_rna_2a-1b.dat")
+data2 = np.loadtxt("7nn0_rna_only.2A-1B.dat")
+data3 = np.loadtxt("../atp/7nn0_rna_atp.2A-1B.dat")
+sns.distplot(data, hist = False, kde = True, kde_kws = {'linewidth': 1}, label = '6JYT_RNA', color = 'b')
+sns.distplot(data1, hist = False, kde = True, kde_kws = {'linewidth': 1}, label = '6JYT_RNA+ATP', color = 'g')
+sns.distplot(data2, hist = False, kde = True, kde_kws = {'linewidth': 1}, label = '7NN0_RNA', color = 'r')
+sns.distplot(data3, hist = False, kde = True, kde_kws = {'linewidth': 1}, label = '7NN0_RNA+ATP', color = 'k')
+plt.legend(prop={'size': 14}, loc='upper right')
+plt.title('2A-1B Probability Density', fontweight='bold')
+plt.xlabel('Domain 2A-1B Distance (Å)', fontweight='bold')
+plt.ylabel('Probability Density', fontweight='bold')
+plt.grid(b=True, which='major', axis='both', color='#808080', linestyle='--')
+plt.savefig("all76_2a-1b.png", dpi=500)
+plt.show()
