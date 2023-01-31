@@ -1,0 +1,19 @@
+#Per frame contact analysis of substrate (eg. ATP) with the protein.
+
+#Here, I use cpptraj module (AMBER) to obtain all interatomic distances within 5 Angstrom of protein-ligand interaction.
+#Assuming there are 1000 frames (rows) and 25 possible interactions (columns) and you desire to keep only the first element <=5 on a row, if no value <=5 in the row, write 0
+
+table = np.loadtxt("atp_rna-310.dat") #distances
+new_table = []
+
+for row in table:
+    for value in row:
+        if value <= 5:
+            new_table.append(value)
+            break
+    else:
+        new_table.append(0)
+
+print(new_table)
+z = np.transpose(new_table)
+np.savetxt('atprna_310.dat', z, '%s')
