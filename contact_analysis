@@ -1,7 +1,69 @@
-#Per frame contact analysis of substrate (eg. ATP) with the protein.
+##Per frame contact analysis of substrate (eg. ATP) with the protein.
 
-#Here, I use cpptraj module (AMBER) to obtain all interatomic distances within 5 Angstrom of protein-ligand interaction.
-#Assuming there are 1000 frames (rows) and 25 possible interactions (columns) and you desire to keep only the first element <=5 on a row, if no value <=5 in the row, write 0
+##This analysis was done using the below scripts prepared by Priti Roy
+
+#Library Import
+import numpy as np
+import MDAnalysis as mda
+from collections import Counter, OrderedDict
+
+#System upload
+u = mda.Universe("stripped.atp_r1.prmtop", "all_atp_combine.dcd");
+sel = u.select_atoms("protein and around 5.0 (resid 600:607 and name P)", updating=True);
+f = []
+
+#Analyze over the trajectory
+for ts in u.trajectory:
+	data = sel.resids
+	uniq_ids = str(np.unique(data))
+	f.append(uniq_ids)
+np.savetxt('r1p1_ATP_prot_res_50ns.out', f, '%s', delimiter=',', newline='\n')
+
+#Formating the elements of lists
+f2 = []
+for i in f:
+	elm = i.split()
+	elm.pop(0)
+	elm2 = [s.replace(']', '') for s in elm]
+	f2.append(elm2)
+
+#Unique elements with occurance number
+c = Counter(e for l in f2 for e in l)
+unq_id = list(c)
+data = []
+for p in unq_id:
+	data.append('%s  %d' % (p, c[p]))
+print(data)
+y = np.array(data)
+np.savetxt('r1p1_ATP_prot_count.out', y, '%s')
+
+The output (i. e. r1p1_ATP_prot_count.out) was further processed to obtain the %contact per residue based on the total trajectories.
+
+import numpy as np
+data = np.loadtxt("r1p1_ATP_prot_count.out")
+x = data[:,0]
+y = data[:,1]
+data_new = np.transpose([x+0, (y/1095000)*100])
+np.savetxt('r1p1_ATP_prot.out', data_new, '%s')
+
+
+##The above contact enable us to know the exact residues interacting within ≤ 5.0 Å to any substrate atom or P of RNA.
+##Since our simulation is boosted, reweighing the energy is critical for more accurate analysis.
+##So, we recalculated the contact using distance within ≤ 5.0 Å of motifs Ia, IV, and V to any RNA phosphorus and estimated %unweighted integrand and %reweighed distance. 
+##Here, I use cpptraj module (AMBER) to obtain all interatomic distances within 5 Angstrom of residue-ligand interaction.
+
+#to delete column 1
+f = open("atp_rna_310.dat", "r") #distances from cpptraj with frame index on first column
+g = open("atp_rna-310.dat", "w")
+
+for line in f:
+    if line.strip():
+        g.write("\t".join(line.split()[1:]) + "\n")
+
+f.close()
+g.close()
+
+##Assuming there are 1000 frames (rows) and 25 possible interactions (columns) and you desire to keep only the first element <=5 on a row, if no value <=5 in the row, write 0
 
 table = np.loadtxt("atp_rna-310.dat") #distances
 new_table = []
@@ -17,3 +79,5 @@ for row in table:
 print(new_table)
 z = np.transpose(new_table)
 np.savetxt('atprna_310.dat', z, '%s')
+
+
