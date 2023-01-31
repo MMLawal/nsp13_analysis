@@ -114,3 +114,20 @@ print('Integration bewteen {} and {} --> '.format(x1,x2),res)
 
 #4. Reweigh distance atprna_310.dat using PyReweighting-1D.py from http://miaolab.org/PyReweighting/ 
 Convert the Cumulant expansion to the 2nd order ("Gaussian approximation") output (pmf-c2*) to normalized pobability density using pmf_data = np.exp(-y/0.6) (Normalized probability density = e^(-free energy/RT)).
+
+Example
+
+import scipy.integrate as integrate
+
+data = np.loadtxt("pmf-c2-atprna_310.dat.xvg")
+x = data[:,1]
+
+def prob_density(x):
+    return np.exp(-x/0.6)
+
+x1 = 0
+x2 = 5
+
+integrand = integrate.quad(prob_density,x1,x2)
+
+print("The integrand of points x1 and x2 is",integrand[0])
