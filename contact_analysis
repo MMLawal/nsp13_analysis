@@ -1,6 +1,6 @@
 ##Per frame contact analysis of substrate (eg. ATP) with the protein.
 
-##This analysis was done using the below scripts prepared by Priti Roy
+#1. This analysis was done using the below scripts prepared by Priti Roy
 
 #Library Import
 import numpy as np
@@ -37,7 +37,7 @@ print(data)
 y = np.array(data)
 np.savetxt('r1p1_ATP_prot_count.out', y, '%s')
 
-The output (i. e. r1p1_ATP_prot_count.out) was further processed to obtain the %contact per residue based on the total trajectories.
+##The output (i. e. r1p1_ATP_prot_count.out) was further processed to obtain the %contact per residue based on the total trajectories.
 
 import numpy as np
 data = np.loadtxt("r1p1_ATP_prot_count.out")
@@ -50,7 +50,8 @@ np.savetxt('r1p1_ATP_prot.out', data_new, '%s')
 ##The above contact enable us to know the exact residues interacting within ≤ 5.0 Å to any substrate atom or P of RNA.
 ##Since our simulation is boosted, reweighing the energy is critical for more accurate analysis.
 ##So, we recalculated the contact using distance within ≤ 5.0 Å of motifs Ia, IV, and V to any RNA phosphorus and estimated %unweighted integrand and %reweighed distance. 
-##Here, I use cpptraj module (AMBER) to obtain all interatomic distances within 5 Angstrom of residue-ligand interaction.
+
+#2. Here, I use cpptraj module (AMBER) to obtain all interatomic distances within 5 Angstrom of residue-ligand interaction.
 
 #to delete column 1
 f = open("atp_rna_310.dat", "r") #distances from cpptraj with frame index on first column
@@ -80,4 +81,36 @@ print(new_table)
 z = np.transpose(new_table)
 np.savetxt('atprna_310.dat', z, '%s')
 
+##The %contact per frames with any interatomic distance (≤ 5.0 Å) residue-substrate is equal to the first analysis.
 
+#3. Do normalized probability density and integrate distances 0-5 
+
+#import libraries
+from scipy.integrate import quad
+from scipy.stats import norm
+from scipy.stats import sem
+import seaborn as sns
+import numpy as np
+import matplotlib.pyplot as plt
+import scipy.stats
+
+unweighted PDF
+x = np.loadtxt("atprna_310.dat")
+x_min = np.min(x)
+x_max = np.max(x)
+mean = np.mean(x) 
+std = np.std(x)
+
+def normal_distribution_function(x):
+    value = scipy.stats.norm.pdf(x,mean,std)
+    return value
+
+x1 = 0
+x2 = 5
+res, err = quad(normal_distribution_function, x1, x2)
+print('Normal Distribution (mean,std):',mean,std)
+print('Integration bewteen {} and {} --> '.format(x1,x2),res)
+
+
+#4. Reweigh distance atprna_310.dat using PyReweighting-1D.py from http://miaolab.org/PyReweighting/ 
+Convert the Cumulant expansion to the 2nd order ("Gaussian approximation") output (pmf-c2*) to normalized pobability density using pmf_data = np.exp(-y/0.6) (Normalized probability density = e^(-free energy/RT)).
