@@ -52,6 +52,43 @@ np.savetxt('r1p1_ATP_prot.out', data_new, '%s')
 ##So, we recalculated the contact using distance within ≤ 5.0 Å of motifs Ia, IV, and V to any RNA phosphorus and estimated %unweighted and %reweighed integrand of the distance. 
 
 #2. Here, I use cpptraj module (AMBER) to obtain all interatomic distances within 5 Angstrom of residue-ligand interaction.
+#create an input file and run cpptraj *.prmtop dist310.in as below
+
+trajin all_adp_combine.dcd
+distance 310a :310@N :603@P out adp_rna_310.dat
+distance 310b :310@H :603@P out adp_rna_310.dat
+distance 310c :310@CA :603@P out adp_rna_310.dat
+distance 310d :310@HA :603@P out adp_rna_310.dat
+distance 310e :310@CB :603@P out adp_rna_310.dat
+distance 310f :310@HB2 :603@P out adp_rna_310.dat
+distance 310g :310@HB3 :603@P out adp_rna_310.dat
+distance 310h :310@OG :603@P out adp_rna_310.dat
+distance 310i :310@HG :603@P out adp_rna_310.dat
+distance 310j :310@C :603@P out adp_rna_310.dat
+distance 310k :310@O :603@P out adp_rna_310.dat
+distance 310l :310@N :604@P out adp_rna_310.dat
+distance 310m :310@H :604@P out adp_rna_310.dat
+distance 310n :310@CA :604@P out adp_rna_310.dat
+distance 310o :310@HA :604@P out adp_rna_310.dat
+distance 310p :310@CB :604@P out adp_rna_310.dat
+distance 310q :310@HB2 :604@P out adp_rna_310.dat
+distance 310r :310@HB3 :604@P out adp_rna_310.dat
+distance 310s :310@OG :604@P out adp_rna_310.dat
+distance 310t :310@HG :604@P out adp_rna_310.dat
+distance 310u :310@C :604@P out adp_rna_310.dat
+distance 310v :310@O :604@P out adp_rna_310.dat
+distance 3101 :310@N :605@P out adp_rna_310.dat
+distance 3102 :310@H :605@P out adp_rna_310.dat
+distance 3103 :310@CA :605@P out adp_rna_310.dat
+distance 3104 :310@HA :605@P out adp_rna_310.dat
+distance 3105 :310@CB :605@P out adp_rna_310.dat
+distance 3106 :310@HB2 :605@P out adp_rna_310.dat
+distance 3107 :310@HB3 :605@P out adp_rna_310.dat
+distance 3108 :310@OG :605@P out adp_rna_310.dat
+distance 3109 :310@HG :605@P out adp_rna_310.dat
+distance 310w :310@C :605@P out adp_rna_310.dat
+distance 310x :310@O :605@P out adp_rna_310.dat
+
 
 #to delete column 1
 f = open("atp_rna_310.dat", "r") #distances from cpptraj with frame index on first column
