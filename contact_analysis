@@ -49,7 +49,7 @@ np.savetxt('r1p1_ATP_prot.out', data_new, '%s')
 
 ##The above contact enable us to know the exact residues interacting within ≤ 5.0 Å to any substrate atom or P of RNA.
 ##Since our simulation is boosted, reweighing the energy is critical for more accurate analysis.
-##So, we recalculated the contact using distance within ≤ 5.0 Å of motifs Ia, IV, and V to any RNA phosphorus and estimated %unweighted integrand and %reweighed distance. 
+##So, we recalculated the contact using distance within ≤ 5.0 Å of motifs Ia, IV, and V to any RNA phosphorus and estimated %unweighted and %reweighed integrand of the distance. 
 
 #2. Here, I use cpptraj module (AMBER) to obtain all interatomic distances within 5 Angstrom of residue-ligand interaction.
 
