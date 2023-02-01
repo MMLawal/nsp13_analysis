@@ -116,7 +116,6 @@ print('Integration bewteen {} and {} --> '.format(x1,x2),res)
 Convert the Cumulant expansion to the 2nd order ("Gaussian approximation") output (pmf-c2*) to normalized pobability density using pmf_data = np.exp(-y/0.6) (Normalized probability density = e^(-free energy/RT)).
 
 Example
-
 import scipy.integrate as integrate
 
 data = np.loadtxt("pmf-c2-atprna_310.dat.xvg")
